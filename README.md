@@ -9,9 +9,8 @@ This repository complements the paper *Large Multimodal Models Evaluation: A Sur
 
 **Paper:** [SCIS](https://www.sciengine.com/SCIS/doi/10.1007/s11432-025-4676-4)
 **Project Page:** [AIBench / LMM Evaluation Survey](https://github.com/aiben-ch/LMM-Evaluation-Survey)
-
-## Interactive Benchmark Explorer
-![Live Demo](https://luv-oct22.github.io/LMM-Evaluation-Survey/)
+## Interactive Explorer: 
+[Live Demo](https://luv-oct22.github.io/LMM-Evaluation-Survey/)
 
 ---
 ## Contributions
