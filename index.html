@@ -364,15 +364,10 @@
       </div>
 
       <div class="setting-group">
-        <label>Citation Range</label>
-        <input type="range" id="scoreMinSlider" min="0" max="12000" value="0">
+        <label>Citation Range (max)</label>
+        <input type="range" id="scoreMaxSlider" min="0" max="1200" step="1" value="120">
         <div class="range-labels">
-          <span>Min: <span id="scoreMinLabel">0</span></span>
-          <span></span>
-        </div>
-        <input type="range" id="scoreMaxSlider" min="0" max="12000" value="12000" style="margin-top:8px;">
-        <div class="range-labels">
-          <span>Max: <span id="scoreMaxLabel">12000</span></span>
+          <span>Max: <span id="scoreMaxLabel">12,000</span></span>
           <span></span>
         </div>
       </div>
@@ -534,7 +529,7 @@
         paper : "https://arxiv.org/abs/2401.10529",
         github: "https://github.com/umd-huang-lab/Mementos"
       },
-      
+
     ];
 
     const chart = echarts.init(document.getElementById('chart'));
@@ -543,8 +538,10 @@
     let selectedOrgs = new Set();
     let currentMinDate = new Date('2020-01-01');
     let currentMaxDate = new Date('2026-07-01');
-    let scoreMin = 0;
     let scoreMax = 12000;
+    // Snap positions for the max-citation slider: 50, 100, 200, 300, ..., 12000
+    const citationSnaps = [50, 100];
+    for (let v = 200; v <= 12000; v += 100) citationSnaps.push(v);
     let showLabels = false;
     let showLines = false;
     let pointSize = 14;
@@ -646,7 +643,6 @@
         selectedOrgs.has(d.org) &&
         new Date(d.date) >= currentMinDate &&
         new Date(d.date) <= currentMaxDate &&
-        d.citations >= scoreMin &&
         d.citations <= scoreMax
       );
 
@@ -719,11 +715,14 @@
           nameTextStyle: { fontSize: 13, color: '#666' },
           axisLine: { lineStyle: { color: '#ddd' } },
           axisTick: { lineStyle: { color: '#ddd' } },
-          axisLabel: { color: '#666', fontSize: 12, formatter: v => v >= 1000 ? (v / 1000) + 'k' : v },
+          axisLabel: {
+            color: '#666', fontSize: 12,
+            formatter: v => v === 0 ? '' : (v >= 1000 ? (v / 1000) + 'k' : v)
+          },
           splitLine: { lineStyle: { color: '#f5f5f5' } },
           min: 0,
-          max: 12000,
-          interval: 2000,
+          max: scoreMax * 6 / 5,
+          interval: scoreMax / 5
         },
         series: series,
       };
@@ -831,20 +830,20 @@
       render();
     });
 
-    // Score sliders
-    const scoreMinSlider = document.getElementById('scoreMinSlider');
+    // Citation max slider — snaps to 50, 100, 200, 300, ..., 12000
     const scoreMaxSlider = document.getElementById('scoreMaxSlider');
-    const scoreMinLabel = document.getElementById('scoreMinLabel');
     const scoreMaxLabel = document.getElementById('scoreMaxLabel');
+    scoreMaxSlider.min = 0;
+    scoreMaxSlider.max = citationSnaps.length - 1;
+    scoreMaxSlider.step = 1;
+    const _defaultMaxIdx = citationSnaps.indexOf(scoreMax);
+    scoreMaxSlider.value = _defaultMaxIdx >= 0 ? _defaultMaxIdx : citationSnaps.length - 1;
+    scoreMaxLabel.textContent = scoreMax.toLocaleString();
 
-    scoreMinSlider.addEventListener('input', function() {
-      scoreMin = parseInt(this.value);
-      scoreMinLabel.textContent = scoreMin;
-      render();
-    });
     scoreMaxSlider.addEventListener('input', function() {
-      scoreMax = parseInt(this.value);
-      scoreMaxLabel.textContent = scoreMax;
+      const idx = parseInt(this.value);
+      scoreMax = citationSnaps[idx];
+      scoreMaxLabel.textContent = scoreMax.toLocaleString();
       render();
     });
 
