@@ -353,7 +353,7 @@
         <label>Time Range</label>
         <input type="range" id="timeMinSlider" min="0" max="100" value="0">
         <div class="range-labels">
-          <span>From: <span id="timeMinLabel">2020-01</span></span>
+          <span>From: <span id="timeMinLabel">2018-01</span></span>
           <span></span>
         </div>
         <input type="range" id="timeSlider" min="0" max="100" value="100" style="margin-top:8px;">
@@ -680,7 +680,7 @@
 
     // State
     let selectedOrgs = new Set();
-    let currentMinDate = new Date('2020-01-01');
+    let currentMinDate = new Date('2018-01-01');
     let currentMaxDate = new Date('2026-07-01');
     let scoreMax = 12000;
     // Snap positions for the max-citation slider: 50, 100, 200, 300, ..., 12000
@@ -690,7 +690,7 @@
     let showLines = false;
     let pointSize = 14;
     let chartType = 'scatter';
-    const minDate = new Date('2020-01-01');
+    const minDate = new Date('2018-01-01');
     const maxDate = new Date('2026-07-01');
 
     // Build org checkboxes
